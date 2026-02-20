@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-ci
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/acme/gitops-repo.git
+    targetRevision: main
+    path: apps/myapp/overlays/ci
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-ci
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
